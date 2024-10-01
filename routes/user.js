@@ -1,5 +1,5 @@
 const { Router } = require('express')
-userRouter = Router();
+const userRouter = Router();
 const { UserModel } = require('../db')
 const { z } = require('zod')
 const bcrypt = require('bcrypt')
@@ -8,7 +8,7 @@ const { UserSecret, jwt, auth } = require('../auth')
 userRouter.post('/signup', async (req, res) => {
   const requiredBody = z.object({
     name: z.string().min(3).max(100),
-    email: z.email(),
+    email: z.string().email(),
     password: z.string().min(3).max(100)
   })
   const parsedCorrectly = requiredBody.safeParse(req.body);
@@ -37,10 +37,10 @@ userRouter.post('/signup', async (req, res) => {
 
 userRouter.post('/signin', async (req, res) => {
   const requiredBody = z.object({
-    email: z.email(),
+    email: z.string().email(),
     password: z.string()
   })
-  const parsedCorrectly = requiredBody.safeParse(req.body)
+  const parsedCorrectly = requiredBody.safeParse(req.body);
   if (!parsedCorrectly) {
     res.status(403).json({
       message: "input validation failed"
@@ -60,11 +60,18 @@ userRouter.post('/signin', async (req, res) => {
     const token = jwt.sign({
       email: user.email
     }, UserSecret)
+    res.json({
+      token
+    })
   } else {
     res.status(403).json({
       message: "invalid creds"
     })
   }
+})
+
+userRouter.get('/check', auth, (req, res) => {
+  res.send("you have access to the app")
 })
 
 
