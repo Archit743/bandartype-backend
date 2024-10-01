@@ -7,6 +7,18 @@ require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const cors = require('cors')
 
+const keepServerAlive = () => {
+  setTimeout(() => {
+    console.log('Performing a dummy task to keep the server alive...');
+    const now = new Date();
+    console.log(`Server pinged at ${now.toISOString()}`);
+
+    // Recursively call keepServerAlive to set the next timeout
+    keepServerAlive();
+  }, 840000);
+};
+
+keepServerAlive()
 
 
 app.use(express.json())
