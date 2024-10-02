@@ -9,7 +9,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 async function generateTextGemini(textLength) {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-  const prompt = `Generate a random sentence that has ${textLength * 6.5} words. make sure to not return any extra text than those words. it should be plane english without any code related words like /n or something`;
+  const prompt = `Generate a random sentence that has ${textLength} words. make sure to not return any extra text than those words. it should be plane english without any code related words like /n or something.Make sure the word count doest not exeed +- 2 words`;
 
   const result = await model.generateContent(prompt);
 
